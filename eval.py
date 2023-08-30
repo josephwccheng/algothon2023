@@ -2,25 +2,28 @@
 
 import numpy as np
 import pandas as pd
-from teamName import getMyPosition as getPosition
+from main import getMyPosition as getPosition
 
 nInst = 0
 nt = 0
 commRate = 0.0010
 dlrPosLimit = 10000
 
+
 def loadPrices(fn):
     global nt, nInst
-    #df=pd.read_csv(fn, sep='\s+', names=cols, header=None, index_col=0)
-    df=pd.read_csv(fn, sep='\s+', header=None, index_col=None)
+    # df=pd.read_csv(fn, sep='\s+', names=cols, header=None, index_col=0)
+    df = pd.read_csv(fn, sep='\s+', header=None, index_col=None)
     nt, nInst = df.values.shape
     return (df.values).T
 
-pricesFile="./prices.txt"
+
+pricesFile = "./prices.txt"
 prcAll = loadPrices(pricesFile)
-print ("Loaded %d instruments for %d days" % (nInst, nt))
+print("Loaded %d instruments for %d days" % (nInst, nt))
 
 currentPos = np.zeros(nInst)
+
 
 def calcPL(prcHist):
     cash = 0
@@ -30,11 +33,11 @@ def calcPL(prcHist):
     totDVolumeRandom = 0
     value = 0
     todayPLL = []
-    (_,nt) = prcHist.shape
-    for t in range(1,251): 
-        prcHistSoFar = prcHist[:,:t]
+    (_, nt) = prcHist.shape
+    for t in range(1, 501):
+        prcHistSoFar = prcHist[:, :t]
         newPosOrig = getPosition(prcHistSoFar)
-        curPrices = prcHistSoFar[:,-1] #prcHist[:,t-1]
+        curPrices = prcHistSoFar[:, -1]  # prcHist[:,t-1]
         posLimits = np.array([int(x) for x in dlrPosLimit / curPrices])
         clipPos = np.clip(newPosOrig, -posLimits, posLimits)
         newPos = np.array([np.trunc(x) for x in clipPos])
@@ -52,24 +55,22 @@ def calcPL(prcHist):
         ret = 0.0
         if (totDVolume > 0):
             ret = value / totDVolume
-        print ("Day %d value: %.2lf todayPL: $%.2lf $-traded: %.0lf return: %.5lf" % (t,value, todayPL, totDVolume, ret))
+        print("Day %d value: %.2lf todayPL: $%.2lf $-traded: %.0lf return: %.5lf" %
+              (t, value, todayPL, totDVolume, ret))
     pll = np.array(todayPLL)
-    (plmu,plstd) = (np.mean(pll), np.std(pll))
+    (plmu, plstd) = (np.mean(pll), np.std(pll))
     annSharpe = 0.0
     if (plstd > 0):
         annSharpe = np.sqrt(250) * plmu / plstd
     return (plmu, ret, plstd, annSharpe, totDVolume)
 
 
-
 (meanpl, ret, plstd, sharpe, dvol) = calcPL(prcAll)
 score = meanpl - 0.1*plstd
-print ("=====")
-print ("mean(PL): %.1lf" % meanpl)
-print ("return: %.5lf" % ret)
-print ("StdDev(PL): %.2lf" % plstd)
-print ("annSharpe(PL): %.2lf " % sharpe)
-print ("totDvolume: %.0lf " % dvol)
-print ("Score: %.2lf" % score)
-
-
+print("=====")
+print("mean(PL): %.1lf" % meanpl)
+print("return: %.5lf" % ret)
+print("StdDev(PL): %.2lf" % plstd)
+print("annSharpe(PL): %.2lf " % sharpe)
+print("totDvolume: %.0lf " % dvol)
+print("Score: %.2lf" % score)

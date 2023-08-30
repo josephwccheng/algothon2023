@@ -1,8 +1,10 @@
 numpy
 pandas
-# matplotlib
 statsmodels
 scikit-learn
-# seaborn
 scipy
 xgboost
+
+matplotlib
+seaborn
+plotly

@@ -1,8 +1,8 @@
 # Brief
 
-Leaderboard update submissions are due **9:00AM AEST 10 August.** 
+Leaderboard update submissions are due **9:00AM AEST 10 August.**
 
-Preliminary round submissions are due **9:00AM AEST 21 August.** 
+Preliminary round submissions are due **9:00AM AEST 21 August.**
 
 Teams which proceed to the final round, will need to be available at **6:00PM AEST 6 September** to attend.
 
@@ -90,11 +90,30 @@ We will attempt to import and run through all non-standard packages if declared.
 
 The program we will use to evaluate your algorithm is provided in _eval.py_
 
-The formula used will be: 
+The formula used will be:
 
-**mean(PL) - 0.1 * StdDev(PL)**
+**mean(PL) - 0.1 \* StdDev(PL)**
 
 Your algorithms will be assessed against _unseen, future_ price data of the same 50 instruments within the provided simulated trading universe.
 
 We expect algorithms to have a maximum runtime of ~10min.
 
+## TODO
+
+Predictive Model
+
+- feature engineering - lag features
+- Create Different Predictive models (ARIMA)
+- Create an model with all instruments
+- Have a Hybrid model of the models metioned above
+
+Trading Algorithm - Decisioning
+
+- Have a Pair wise algorithm
+- Include any other algorithm mentioned
+
+Others
+
+- Store results on local file
+
+References -https://timeseriesreasoning.com/contents/time-series-decomposition/#:~:text=In%20Python%2C%20the%20statsmodels%20library,in%20one%20line%20of%20code.
